@@ -7,6 +7,7 @@
 const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const router = require('./router');
 const config = require('./config');
 
 // create the server
@@ -32,17 +33,17 @@ const server = http.createServer((req, res) => {
   req.on('end', () => {
     buffer += decoder.end();
 
-    // choose the handler this request should go to
-    const chosenHandler = typeof(router[trimmedPath]) !== 'undefined'
-      ? router[trimmedPath]
-      : router.notFound;
-
     // construct the data object to send to the handler
     const data = {
       'trimmedPath' : trimmedPath,
       'method' : method,
       'payload' : buffer,
     };
+
+    // choose the handler this request should go to
+    const chosenHandler = typeof(router[trimmedPath]) !== 'undefined'
+      ? router[trimmedPath]
+      : router.notFound;
 
     // route the request to the handler specified in the router
     chosenHandler(data, (statusCode, payload) => {
@@ -75,33 +76,8 @@ const server = http.createServer((req, res) => {
 
 // start the server
 server.listen(config.port, () => {
-  console.log('Server is listen on port ', config.port);
+  console.log('Server is listen on port ', config.port, ' and running on ', config.envName, ' mode');
 });
 
-// define the handlers
-let handlers = {};
 
-handlers.hello = (data, callback) => {
-  // callback a http status code and a payload (object)
-  let message = {
-    "message" : ''
-  };
-  switch (data.method) {
-    case 'post':
-      message.message = "welcome :)";
-      break;
-    default:
-      message.message = "";
-  }
-  callback(200, message);
-};
 
-handlers.notFound = (data, callback) => {
-  callback(404);
-};
-
-// define the routers
-const router = {
-  'hello': handlers.hello,
-  'notFound' : handlers.notFound
-};
