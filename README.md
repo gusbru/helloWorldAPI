@@ -43,11 +43,11 @@ empty message as a response.
 
 ![get request result][get]
 
-[get]: https://github.com/gusbru/helloWorldAPI/images/get.png "Get request"
+[get]: https://github.com/gusbru/helloWorldAPI/blob/master/images/get.png "Get request"
 
 When you change the method to **Post** and with the same endpoint */hello* you should
 get a welcome message.
 
 ![post request result][post]
 
-[post]: https://github.com/gusbru/helloWorldAPI/images/put.png "Put request"
+[post]: https://github.com/gusbru/helloWorldAPI/blob/master/images/post.png "Put request"
